@@ -1,0 +1,1 @@
+"""Módulo com funções para criarlayouts comuns pela aplicação"""

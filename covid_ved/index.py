@@ -1,21 +1,37 @@
 import os
 
+import dash_html_components as html
 from dash.dependencies import Input, Output
 
 from app import app
-from evolucao_sp import evolucao_cidade
 from casos_estado import casos_por_estado
+from evolucao_cidade import evolucao_cidade
+from tabela_resumo import tabela_resumo
+from tabela_estatisticas import tabela_estatisticas
 
 
 @app.callback(
     Output('page-content', 'children'),
     [Input('url', 'pathname')]
 )
-def criar_tabela(_):
-    return [
-        evolucao_cidade,
-        casos_por_estado
-    ]
+def criar_visualizacao(_):
+    return html.Div([
+        html.Div(
+            [
+                evolucao_cidade,
+                casos_por_estado
+            ],
+            className='row m-0'
+        ),
+        html.Div(
+            [
+                tabela_resumo,
+                tabela_estatisticas
+            ],
+            className='row m-0'
+        )
+    ])
+
 
 server = app.server
 

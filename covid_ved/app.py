@@ -25,7 +25,7 @@ app = dash.Dash(
 app.layout = html.Div(
     [
         dcc.Location(id='url', refresh=False),
-        html.Div(['Hello world'], id='page-content'),
+        html.Div(html.Div('', id='loading'), id='page-content'),
     ],
     id='content'
 )
