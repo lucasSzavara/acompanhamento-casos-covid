@@ -8,14 +8,14 @@ from app import app
 from data import df
 from layouts.cards import get_cards
 
-evolucao_cidade = html.Div(get_cards(
+evolucao_casos = html.Div(get_cards(
     html.Div(
         [
             html.Div(
                 [
                     html.Div(
                         dcc.Dropdown(
-                            id='estado',
+                            id='estado-casos',
                             value=None,
                             options=[{'label': i, 'value': i} for i in df['state'].unique()],
                             placeholder='UF'
@@ -24,7 +24,7 @@ evolucao_cidade = html.Div(get_cards(
                     ),
                     html.Div(
                         dcc.Dropdown(
-                            id='cidade',
+                            id='cidade-casos',
                             value=None,
                             options=[{'label': '', 'value': ''}],
                             placeholder='Cidade'
@@ -33,16 +33,16 @@ evolucao_cidade = html.Div(get_cards(
                     )
                 ], className='row m-0'
             ),
-            html.Div(id='chart_placeholder', ),
+            html.Div(id='chart_placeholder-casos', ),
         ],
-        id='evolucao_cidade'
-    ), header='Evolução por dia'
+        id='evolucao_casos'
+    ), header='Evolução de casos em função do tempo'
 ), className='col-6')
 
 
 @app.callback(
-    Output('cidade', 'options'),
-    [Input('estado', 'value')]
+    Output('cidade-casos', 'options'),
+    [Input('estado-casos', 'value')]
 )
 def buscar_cidades(uf):
     if uf != '':
@@ -53,37 +53,37 @@ def buscar_cidades(uf):
 
 
 @app.callback(
-    Output('chart_placeholder', 'children'),
-    [Input('cidade', 'value'), Input('estado', 'value')]
+    Output('chart_placeholder-casos', 'children'),
+    [Input('cidade-casos', 'value'), Input('estado-casos', 'value')]
 )
 def gerar_grafico(cidade, uf):
     if cidade is not None and uf is not None:
-        df_cidade = df[(df['state'] == uf) & (df['city'] == cidade) & (df['new_confirmed'] >= 0) & (df['is_repeated'] == False)]
-        df_cidade.set_index(pd.DatetimeIndex(df_cidade.last_available_date), inplace=True)
-        df_cidade = df_cidade.resample('D', origin='start').bfill()
-        df_cidade.last_available_date = df_cidade.index.values
+        df_casos = df[(df['state'] == uf) & (df['city'] == cidade) & (df['new_confirmed'] >= 0) & (df['is_repeated'] == False)]
+        df_casos.set_index(pd.DatetimeIndex(df_casos.last_available_date), inplace=True)
+        df_casos = df_casos.resample('D', origin='start').bfill()
+        df_casos.last_available_date = df_casos.index.values
     elif uf is not None:
-        df_cidade = df[(df['place_type'] == 'state') & (df['state'] == uf) & (df['new_confirmed'] >= 0) & (df['is_repeated'] == False)]
-        df_cidade.set_index(pd.DatetimeIndex(df_cidade.last_available_date), inplace=True)
-        df_cidade = df_cidade.resample('D', origin='start').bfill()
-        df_cidade.last_available_date = df_cidade.index.values
+        df_casos = df[(df['place_type'] == 'state') & (df['state'] == uf) & (df['new_confirmed'] >= 0) & (df['is_repeated'] == False)]
+        df_casos.set_index(pd.DatetimeIndex(df_casos.last_available_date), inplace=True)
+        df_casos = df_casos.resample('D', origin='start').bfill()
+        df_casos.last_available_date = df_casos.index.values
     else:
-        df_cidade = df[(df['place_type'] == 'state') & (df['new_confirmed'] >= 0) & (df['is_repeated'] == False)]
+        df_casos = df[(df['place_type'] == 'state') & (df['new_confirmed'] >= 0) & (df['is_repeated'] == False)]
         dfs_uf = []
-        for uf in df_cidade['state'].unique():
-            df_uf = df_cidade[df_cidade['state'] == uf]
+        for uf in df_casos['state'].unique():
+            df_uf = df_casos[df_casos['state'] == uf]
             df_uf.set_index(pd.DatetimeIndex(df_uf.last_available_date), inplace=True)
             df_uf = df_uf.resample('D', origin='start').bfill()
             df_uf.last_available_date = df_uf.index.values
             dfs_uf.append(df_uf)
 
-        df_cidade = dfs_uf[0]
+        df_casos = dfs_uf[0]
         for df_uf in dfs_uf[1:]:
-            df_cidade['last_available_confirmed'] += df_uf['last_available_confirmed']
+            df_casos['last_available_confirmed'] += df_uf['last_available_confirmed']
 
     fig = go.Figure(go.Scatter(
-        x=df_cidade['last_available_date'],
-        y=df_cidade['last_available_confirmed'],
+        x=df_casos['last_available_date'],
+        y=df_casos['last_available_confirmed'],
     ))
     fig.update_xaxes(
         dtick="M1",
@@ -103,4 +103,4 @@ def gerar_grafico(cidade, uf):
 
         },
     )
-    return dcc.Graph(id='grafico_evolucao_cidade', figure=fig)
+    return dcc.Graph(id='grafico_evolucao_casos', figure=fig)

@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from data import df
 from layouts.cards import get_cards
 
-with open('https://github.com/lucasSzavara/acompanhamento-casos-covid/blob/main/covid_ved/datasets/brazil_geo.json?raw=true') as response:
+with open('./datasets/brazil_geo.json') as response:
     ufs = json.load(response)
 
 uf_df = df[(df['is_last']) & (df['place_type'] == 'state')]
