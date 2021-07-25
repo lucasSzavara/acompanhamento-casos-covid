@@ -5,6 +5,7 @@ from dash.dependencies import Input, Output
 
 from app import app
 from casos_estado import casos_por_estado
+from mortes_estado import mortes_por_estado
 from evolucao_casos import evolucao_casos
 from evolucao_mortes import evolucao_mortes
 from tabela_resumo import tabela_resumo
@@ -43,6 +44,7 @@ def criar_visualizacao(_):
         html.Div(
             [
                 casos_por_estado,
+                mortes_por_estado
             ],
             className='row m-0 mt-3'
         ),
