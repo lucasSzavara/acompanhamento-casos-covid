@@ -7,9 +7,10 @@ from dash_table.Format import Format, Symbol, Group
 df_ultimo_dia = df[
     (df['place_type'] == 'state') &
     (df['new_confirmed'] >= 0) &
-    (df['is_repeated'] == False) &
-    (df['last_available_date'] == df['last_available_date'].max())
+    (df['is_repeated'] == False)
     ]
+
+df_ultimo_dia = df_ultimo_dia.sort_values(by="last_available_date").drop_duplicates(subset=["state"], keep="last")
 
 df_ultimo_dia['last_available_death_rate'] = df_ultimo_dia['last_available_death_rate'] * 100
 

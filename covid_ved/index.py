@@ -8,6 +8,8 @@ from casos_estado import casos_por_estado
 from evolucao_cidade import evolucao_cidade
 from tabela_resumo import tabela_resumo
 from tabela_estatisticas import tabela_estatisticas
+from comparacao_casos_por_estado import evolucao_estado
+from comparacao_mortalidade_por_estado import evolucao_mortalidade
 
 
 @app.callback(
@@ -28,7 +30,14 @@ def criar_visualizacao(_):
                 tabela_resumo,
                 tabela_estatisticas
             ],
-            className='row m-0'
+            className='row m-0 mt-3'
+        ),
+        html.Div(
+            [
+                evolucao_estado,
+                evolucao_mortalidade
+            ],
+            className='row m-0 mt-3'
         )
     ])
 

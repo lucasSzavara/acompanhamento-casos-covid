@@ -15,6 +15,13 @@ df_mortalidade = series_mortalidade.describe().to_frame()
 df_mortalidade['Valor'] = df_mortalidade[0] * 100
 del df_mortalidade[0]
 df_mortalidade = df_mortalidade.reset_index()
+df_mortalidade = df_mortalidade.append(
+    {
+        'index': 'Taxa Brasil',
+        'Valor': 100 * df_ultimo_dia['last_available_deaths'].sum() / df_ultimo_dia['last_available_confirmed'].sum()
+    },
+    ignore_index=True
+)
 
 titles = {
     'index': 'Estatística'
