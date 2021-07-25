@@ -1,0 +1,1 @@
+web: cd covid_ved/ && gunicorn index:server

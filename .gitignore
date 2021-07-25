@@ -1,5 +1,4 @@
-*.csv
-*.json
-*.geojson
 .idea/
 **/__pycache__/
+*.ipynb
+.ipynb_checkpoints/
