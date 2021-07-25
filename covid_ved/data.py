@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv('./datasets/caso_full.csv')
+df = pd.read_csv('https://media.githubusercontent.com/media/lucasSzavara/acompanhamento-casos-covid/main/covid_ved/datasets/caso_full.csv')
 print(df)
 df['uf'] = df['state']
 df['month'] = pd.to_datetime(df['last_available_date']).apply(lambda x: x.strftime('YYYY-MM'))
